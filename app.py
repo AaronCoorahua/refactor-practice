@@ -11,8 +11,8 @@ class CalculaGanador:
         data = []
         with open('0204.csv', 'r') as csvfile:
             next(csvfile)
-            datareader = csv.reader(csvfile)
-            for fila in datareader:
+            data_votos = csv.reader(csvfile)
+            for fila in data_votos: #Se usa la tecnica de renombrar variables en este caso -> data_reader a data_votos, para tener una mejor idea de que se guarda en esta variable
                 data.append( fila)
         return data
 
