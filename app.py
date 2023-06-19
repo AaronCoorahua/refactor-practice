@@ -22,10 +22,11 @@ class CalculaGanador:
             region, provincia, distrito, dni, candidato, es_valido = fila # 2) Renombrar variables
             if self.isValidDNI(dni) and es_valido == '1':  # 3) Simplificación de condicionales
                 total_votos_validos += 1
-
-                votosxcandidato[candidato] = votosxcandidato.get(candidato, 0) + 1 #Simplificación de condicionales, uso de dict.get() # 4) Eliminacion de codigo duplicado
+                votosxcandidato[candidato] = votosxcandidato.get(candidato, 0) + 1 #Simplificación de condicionales, uso de dict.get()
+                 # 4) Eliminacion de codigo duplicado
 
         return self.obtener_resultado(total_votos_validos, votosxcandidato)
+    
     # 5)División de metodos
     def obtener_resultado(self, total_votos_validos, votosxcandidato):
         porcentaje_ganador = 0.5 * total_votos_validos
@@ -69,4 +70,4 @@ print(c.calcular_ganador(datatest))
 
 c = CalculaGanador()
 datos = c.leerdatos("0204.csv")
-print(c.calcularganador(datos))
+print(c.calcular_ganador(datos))
