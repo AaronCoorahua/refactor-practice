@@ -11,24 +11,28 @@ class CalculaGanador:
                 data.append(fila)
         return data
     
-    def isValidDNI(self, dni):  #División de métodos
+    def isValidDNI(self, dni):  # 1) Extraccion de métodos
         return len(dni) == 8 and dni.isdigit()
 
-    def calcularganador(self, data):
+    def calcular_ganador(self, data):
         votosxcandidato = {}
         total_votos_validos = 0
         for fila in data:
-            region, provincia, distrito, dni, candidato, es_valido = fila #Renombrar variables
-            if self.isValidDNI(dni) and es_valido == '1': #Simplificación de condicionales
+            region, provincia, distrito, dni, candidato, es_valido = fila # 2) Renombrar variables
+            if self.isValidDNI(dni) and es_valido == '1':  # 3) Simplificación de condicionales
                 total_votos_validos += 1
                 if candidato not in votosxcandidato:
                     votosxcandidato[candidato] = 0
-                votosxcandidato[candidato] += 1
+                votosxcandidato[candidato] += 1 # 4) Eliminacion de codigo duplicado
 
+        return self.obtener_resultado(total_votos_validos, votosxcandidato)
+    # 5)División de metodos
+    def obtener_resultado(self, total_votos_validos, votosxcandidato):
         porcentaje_ganador = 0.5 * total_votos_validos
         ganador = None
         segunda_vuelta = []
         no_ganador = []
+
         for candidato, votos in votosxcandidato.items():
             if votos > porcentaje_ganador:
                 ganador = candidato
@@ -37,6 +41,9 @@ class CalculaGanador:
             elif votos < porcentaje_ganador:
                 no_ganador.append(candidato)
 
+        return self.obtener_resultado_final(ganador, segunda_vuelta, no_ganador, votosxcandidato)
+
+    def obtener_resultado_final(self, ganador, segunda_vuelta, no_ganador, votosxcandidato):
         if ganador:
             return [ganador]
         elif len(segunda_vuelta) >= 2:
@@ -56,8 +63,8 @@ datatest = [
     ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '1'],
     ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '0'],
 ]
-print(c.calcularganador(datatest))
+print(c.calcular_ganador(datatest))
 
 c = CalculaGanador()
 datos = c.leerdatos("0204.csv")
-print(c.calcularganador(datos))
+print(c.calcular_ganador(datos))
