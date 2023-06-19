@@ -11,15 +11,15 @@ class CalculaGanador:
                 data.append(fila)
         return data
     
-    def isValidDNI(self, dni):
+    def isValidDNI(self, dni):  #División de métodos
         return len(dni) == 8 and dni.isdigit()
 
     def calcularganador(self, data):
         votosxcandidato = {}
         total_votos_validos = 0
         for fila in data:
-            region, provincia, distrito, dni, candidato, es_valido = fila
-            if self.isValidDNI(dni) and es_valido == '1':
+            region, provincia, distrito, dni, candidato, es_valido = fila #Renombrar variables
+            if self.isValidDNI(dni) and es_valido == '1': #Simplificación de condicionales
                 total_votos_validos += 1
                 if candidato not in votosxcandidato:
                     votosxcandidato[candidato] = 0
@@ -57,3 +57,7 @@ datatest = [
     ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '0'],
 ]
 print(c.calcularganador(datatest))
+
+c = CalculaGanador()
+datos = c.leerdatos("0204.csv")
+print(c.calcularganador(datos))
