@@ -1,39 +1,59 @@
 import csv
-# el programa deberá calcular el ganador de votos validos considerando que los siguientes datos son proporcionados:
-# region,provincia,distrito,dni,candidato,esvalido
-# Si hay un candidato con >50% de votos válidos retornar un array con un string con el nombre del ganador
-# Si no hay un candidato que cumpla la condicion anterior, retornar un array con los dos candidatos que pasan a segunda vuelta
-# Si ambos empatan con 50% de los votos se retorna el que apareció primero en el archivo
-# el DNI debe ser valido (8 digitos)
+
 class CalculaGanador:
 
-    def leerdatos(self):
+    def leerdatos(self, archivo):
         data = []
-        with open('0204.csv', 'r') as csvfile:
+        with open(archivo, 'r') as csvfile:
             next(csvfile)
             data_votos = csv.reader(csvfile)
-            for fila in data_votos: #Se usa la tecnica de renombrar variables en este caso -> data_reader a data_votos, para tener una mejor idea de que se guarda en esta variable
-                data.append( fila)
+            for fila in data_votos: 
+                data.append(fila)
         return data
+    
+    def isValidDNI(self, dni):
+        return len(dni) == 8 and dni.isdigit()
 
     def calcularganador(self, data):
         votosxcandidato = {}
+        total_votos_validos = 0
         for fila in data:
-            if not fila[4] in votosxcandidato:
-                votosxcandidato[fila[4]] = 0
-            if fila[5] == '1':
-                votosxcandidato[fila[4]] = votosxcandidato[fila[4]] + 1
-        for candidato in votosxcandidato:
-            print('candidato: ' + candidato + ' votos validos: ' + str(votosxcandidato[candidato]))
-        for candidato in votosxcandidato:
-            return [candidato]
+            region, provincia, distrito, dni, candidato, es_valido = fila
+            if self.isValidDNI(dni) and es_valido == '1':
+                total_votos_validos += 1
+                if candidato not in votosxcandidato:
+                    votosxcandidato[candidato] = 0
+                votosxcandidato[candidato] += 1
+
+        porcentaje_ganador = 0.5 * total_votos_validos
+        ganador = None
+        segunda_vuelta = []
+        no_ganador = []
+        for candidato, votos in votosxcandidato.items():
+            if votos > porcentaje_ganador:
+                ganador = candidato
+            elif votos == porcentaje_ganador:
+                segunda_vuelta.append(candidato)
+            elif votos < porcentaje_ganador:
+                no_ganador.append(candidato)
+
+        if ganador:
+            return [ganador]
+        elif len(segunda_vuelta) >= 2:
+            return segunda_vuelta[:1]
+        elif len(segunda_vuelta) == 1:
+            return segunda_vuelta + [list(votosxcandidato.keys())[0]]
+        else:
+            no_ganador_ordenado = sorted(no_ganador, key=lambda candidato: votosxcandidato[candidato], reverse=True)
+            return no_ganador_ordenado[:2]
 
 c = CalculaGanador()
-#c.calcularvotos(c.leerdatos())
 datatest = [
-['Áncash', 'Asunción', 'Acochaca', '40810062', 'Eddie Hinesley', '0'],
-['Áncash', 'Asunción', 'Acochaca', '57533597', 'Eddie Hinesley', '1'],
-['Áncash', 'Asunción', 'Acochaca', '86777322', 'Aundrea Grace', '1'],
-['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '1']
+    ['Áncash', 'Asunción', 'Acochaca', '40810062', 'Eddie Hinesley', '0'],
+    ['Áncash', 'Asunción', 'Acochaca', '57533597', 'Eddie Hinesley', '1'],
+    ['Áncash', 'Asunción', 'Acochaca', '86777322', 'Aundrea Grace', '0'],
+    ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '0'],
+    ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '1'],
+    ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '0'],
 ]
 print(c.calcularganador(datatest))
