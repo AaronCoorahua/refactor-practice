@@ -12,7 +12,7 @@ class CalculaGanadorTest(unittest.TestCase):
             ['Áncash', 'Asunción', 'Acochaca', '86777322', 'Aundrea Grace', '0'],
             ['Áncash', 'Asunción', 'Acochaca', '23017965', 'Aundrea Grace', '0']
         ]
-        resultado = self.calculador.calcularganador(data)
+        resultado = self.calculador.calcular_ganador(data)
         self.assertEqual(resultado, ['Eddie Hinesley'])
 
     def test_empate(self):
@@ -22,7 +22,7 @@ class CalculaGanadorTest(unittest.TestCase):
             ['Áncash', 'Asunción', 'Acochaca', '40810062', 'Eddie Hinesley', '1'],
             ['Áncash', 'Asunción', 'Acochaca', '57533597', 'Eddie Hinesley', '1'],        
         ]
-        resultado = self.calculador.calcularganador(data)
+        resultado = self.calculador.calcular_ganador(data)
         self.assertEqual(resultado, ['Aundrea Grace'])
 
     def test_segunda_vuelta(self):
@@ -36,7 +36,7 @@ class CalculaGanadorTest(unittest.TestCase):
             ['Áncash', 'Asunción', 'Acochaca', '86777546', 'Aundrea Grace', '1'],  
             ['Áncash', 'Asunción', 'Acochaca', '86772655', 'Aundrea Grace', '1'],     
         ]
-        resultado = self.calculador.calcularganador(data)
+        resultado = self.calculador.calcular_ganador(data)
         self.assertEqual(resultado, ['Eddie Hinesley','Aundrea Grace'])
 
 if __name__ == '__main__':
